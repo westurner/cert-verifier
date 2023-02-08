@@ -49,12 +49,52 @@ def verify_certificate_file(certificate_file_name, transaction_id=None, options=
     return result
 
 
-if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        for cert_file in sys.argv[1:]:
-            print(cert_file)
-            result = verify_certificate_file(cert_file)
-            print(result)
+TEST_CERTIFICATES = [
+    '../tests/data/2.0/valid.json',
+]
+
+def print_usage():
+    print(f"{sys.argv[0]} [-h][--test] [<cert.json> [<cert_n.json>]+]"
+    print("Verify Blockcerts Certificates (in Python)")
+    print("")
+    print("  --test -- verify certs at the paths in TEST_CERTIFICATES")
+    print("")
+    print("## Examples:")
+    print(f"$ {sys.argv[0]} cert_to_validate.json")
+    print(f"$ {sys.argv[0]} cert_to_validate.json")
+
+
+def main(argv=None):
+    """Verify the blockcerts in ``argv[1:]`` or verify test certificates"""
+    RETCODE_OK = 0
+
+    if argv is None:
+        argv = []
+
+    cert_paths = []
+    results = []
+
+    if len(argv) > 1:
+        if '-h' in argv or '--help' in argv:
+            print_usage()
+            return RETCODE_OK
+ 
+        if '-t' in argv or '--test' in argv:
+            cert_paths = TEST_CERTIFICATES
+        else:
+            cert_paths = argv[1:]
     else:
-        result = verify_certificate_file('../tests/data/2.0/valid.json')
+        # TODO: Should --test be explcitly specified instead? \
+        # TODO: would it be better to run pytest on --test (with @pytest.mark.parametrize in tests/)?
+        print_usage()
+        cert_paths = TEST_CERTIFICATES
+
+    results = dict.fromkeys(cert_paths)
+    for cert_path in cert_paths:
+        results[cert_path] = result = verify_certificate_file(cert_path)
+        print(f'## {cert_path}')
         print(result)
+
+
+if __name__ == "__main__":
+    main(argv=sys.argv)
