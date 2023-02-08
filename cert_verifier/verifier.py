@@ -54,14 +54,15 @@ TEST_CERTIFICATES = [
 ]
 
 def print_usage():
-    print(f"{sys.argv[0]} [-h][--test] [<cert.json> [<cert_n.json>]+]"
+    print(f"{sys.argv[0]} [-h][--test] [<cert.json> [<cert_n.json>]+]")
     print("Verify Blockcerts Certificates (in Python)")
     print("")
     print("  --test -- verify certs at the paths in TEST_CERTIFICATES")
     print("")
     print("## Examples:")
     print(f"$ {sys.argv[0]} cert_to_validate.json")
-    print(f"$ {sys.argv[0]} cert_to_validate.json")
+    print(f"$ {sys.argv[0]} 1.json 2.json 3.json")
+    print(f"$ {sys.argv[0]} --test")
 
 
 def main(argv=None):
